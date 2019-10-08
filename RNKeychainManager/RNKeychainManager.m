@@ -402,6 +402,7 @@ RCT_EXPORT_METHOD(getInternetCredentialsForServer:(NSString *)server withOptions
   NSString *username = (NSString *) [found objectForKey:(__bridge id)(kSecAttrAccount)];
   NSString *password = [[NSString alloc] initWithData:[found objectForKey:(__bridge id)(kSecValueData)] encoding:NSUTF8StringEncoding];
 
+  CFRelease(foundTypeRef);
   return resolve(@{
     @"server": server,
     @"username": username,
@@ -437,7 +438,6 @@ RCT_EXPORT_METHOD(requestSharedWebCredentials:(RCTPromiseResolveBlock)resolve re
       NSString *username = (__bridge NSString *)CFDictionaryGetValue(credentialDict, kSecAttrAccount);
       NSString *password = (__bridge NSString *)CFDictionaryGetValue(credentialDict, kSecSharedPassword);
 
-      CFRelease(foundTypeRef);
       return resolve(@{
         @"server": server,
         @"username": username,
